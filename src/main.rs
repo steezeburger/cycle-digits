@@ -4,7 +4,7 @@
 use bsp::entry;
 use defmt::*;
 use defmt_rtt as _;
-use embedded_hal::digital::v2::OutputPin;
+use embedded_hal::digital::v2::{ InputPin, OutputPin };
 use panic_probe as _;
 
 use adafruit_macropad as bsp;
@@ -47,15 +47,22 @@ fn main() -> ! {
         &mut pac.RESETS,
     );
 
+    // the first key on the macropad
+    let key_1_button = pins.key1.into_pull_up_input();
+
     // the little red led near the usb port on the macropad
     let mut led_pin = pins.led.into_push_pull_output();
 
+    // start with the led off
+    led_pin.set_low().unwrap();
+
     loop {
-        info!("on!");
-        led_pin.set_high().unwrap();
-        delay.delay_ms(1500);
-        info!("off!");
-        led_pin.set_low().unwrap();
-        delay.delay_ms(1500);
+        if key_1_button.is_low().unwrap() {
+            info!("on!");
+            led_pin.set_high().unwrap();
+        } else {
+            info!("off!");
+            led_pin.set_low().unwrap();
+        }
     }
 }
