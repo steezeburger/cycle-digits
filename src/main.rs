@@ -3,7 +3,9 @@
 
 use bsp::entry;
 use defmt::*;
+use defmt_rtt as _; // global logger
 // use embedded_hal::digital::v2::{InputPin, OutputPin};
+use panic_probe as _;
 use smart_leds::{SmartLedsWrite, RGB8};
 use ws2812_pio::Ws2812;
 
@@ -19,9 +21,10 @@ use bsp::hal::{
 };
 
 const RED: RGB8 = RGB8::new(255, 0, 0);
-const GREEN: RGB8 = RGB8::new(0, 255, 0);
-const BLUE: RGB8 = RGB8::new(0, 0, 255);
-const WHITE: RGB8 = RGB8::new(255, 255, 255);
+// const GREEN: RGB8 = RGB8::new(0, 255, 0);
+// const BLUE: RGB8 = RGB8::new(0, 0, 255);
+// const WHITE: RGB8 = RGB8::new(255, 255, 255);
+
 /// Map the LED index to the 2D grid coordinates
 const LED_MAP: [&'static [(u8, u8)]; 10] = [
     &[(0, 0), (0, 1), (0, 2), (1, 0), (1, 2), (2, 0), (2, 2), (3, 0), (3, 1), (3, 2)], // 0
